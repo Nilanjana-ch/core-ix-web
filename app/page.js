@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import Editor from "@monaco-editor/react";
+import PhaseTabs from "../components/PhaseTabs";
 
 const TEMPLATES = {
   c: `#include <stdio.h>\n\nint main() {\n    printf("Hello, C!\\n");\n    return 0;\n}\n`,
@@ -14,6 +15,7 @@ export default function Home() {
   const [stdin, setStdin] = useState("");
   const [output, setOutput] = useState("");
   const [loading, setLoading] = useState(false);
+  const [phases, setPhases] = useState(null);
 
   function changeLanguage(lang) {
     setLanguage(lang);
@@ -23,6 +25,17 @@ export default function Home() {
   async function run() {
     setLoading(true);
     setOutput("Running...");
+
+    // Dummy data: porer step gulote real data diye replace korbo
+    setPhases({
+      lexical: "Token list ekhane ashbe",
+      syntax: "Parse tree ekhane ashbe",
+      semantic: "Symbol table ekhane ashbe",
+      tac: "Three Address Code ekhane ashbe",
+      optimize: "Optimized code ekhane ashbe",
+      codegen: "Generated code ekhane ashbe",
+    });
+
     try {
       const res = await fetch("/api/run", {
         method: "POST",
@@ -71,6 +84,9 @@ export default function Home() {
       <pre style={{ background: "#111", color: "#0f0", padding: 12, minHeight: 80 }}>
         {output}
       </pre>
+
+      <h4>Compiler Phases</h4>
+      <PhaseTabs phases={phases} />
     </main>
   );
 }
